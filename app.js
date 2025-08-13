@@ -212,11 +212,11 @@ class KitCalculatorApp {
         document.getElementById('kit-calculator-form').addEventListener('submit', (e) => this.handleKitCalculation(e));
         
         // Phone generator listeners
-        document.getElementById('generate-phone-btn').addEventListener('click', async () => await this.generatePhoneNumber());
+        document.getElementById('generate-phone-btn').addEventListener('click', () => this.generatePhoneNumber());
         
         // Account page listeners
         document.getElementById('export-data-btn').addEventListener('click', async () => await this.exportUserData());
-        document.getElementById('clear-history-btn').addEventListener('click', async () => await this.clearHistory());
+        document.getElementById('clear-history-btn').addEventListener('click', () => this.clearHistory());
         document.getElementById('reset-demo-btn').addEventListener('click', () => this.resetDemo());
         
         // Kit calculator filtering and pagination
@@ -224,7 +224,7 @@ class KitCalculatorApp {
         document.getElementById('kit-search-clear').addEventListener('click', () => this.clearKitSearch());
         document.getElementById('kit-filter-column').addEventListener('change', (e) => this.handleKitFilterColumn(e));
         document.getElementById('kit-filter-value').addEventListener('input', (e) => this.filterKitHistory());
-        document.getElementById('kit-clear-history').addEventListener('click', async () => await this.clearKitHistory());
+        document.getElementById('kit-clear-history').addEventListener('click', () => this.clearKitHistory());
         document.getElementById('kit-entries-per-page').addEventListener('change', (e) => this.handleKitEntriesPerPageChange(e));
         
         // Phone generator filtering and pagination
@@ -232,7 +232,7 @@ class KitCalculatorApp {
         document.getElementById('phone-search-clear').addEventListener('click', () => this.clearPhoneSearch());
         document.getElementById('phone-filter-column').addEventListener('change', (e) => this.handlePhoneFilterColumn(e));
         document.getElementById('phone-filter-value').addEventListener('input', (e) => this.filterPhoneHistory());
-        document.getElementById('phone-clear-history').addEventListener('click', async () => await this.clearPhoneHistory());
+        document.getElementById('phone-clear-history').addEventListener('click', () => this.clearPhoneHistory());
         document.getElementById('phone-entries-per-page').addEventListener('change', (e) => this.handlePhoneEntriesPerPageChange(e));
         
         // Mobile responsive listeners
@@ -325,16 +325,15 @@ class KitCalculatorApp {
                 }
             };
             
-            // Save to localStorage and XML
+            // Save to localStorage only (no automatic XML export)
             this.saveToLocalStorage();
-            await this.saveToXML();
             
             this.currentUser = username;
             this.isAuthenticated = true;
             localStorage.setItem('currentUser', username);
             
             this.showMainApp();
-            this.showToast(`Welcome, ${username}! Account created and saved to XML database.`, 'success');
+            this.showToast(`Welcome, ${username}! Account created successfully.`, 'success');
             this.updateDashboard();
         } catch (error) {
             console.error('Registration error:', error);
@@ -389,7 +388,7 @@ class KitCalculatorApp {
         }
     }
 
-    async handleKitCalculation(e) {
+    handleKitCalculation(e) {
         e.preventDefault();
         
         const kitNumberInput = document.getElementById('kit-number');
@@ -423,7 +422,6 @@ class KitCalculatorApp {
         // Add to user history
         this.usersData[this.currentUser].history.kitCalculations.push(calculation);
         this.saveToLocalStorage();
-        await this.saveToXML();
         
         // Display result
         this.displayKitResult(calculation);
@@ -448,7 +446,7 @@ class KitCalculatorApp {
         resultDiv.style.display = 'block';
     }
 
-    async generatePhoneNumber() {
+    generatePhoneNumber() {
         const allowDuplicates = document.getElementById('allow-duplicates').checked;
         
         let phoneNumber;
@@ -484,7 +482,6 @@ class KitCalculatorApp {
         // Add to user history
         this.usersData[this.currentUser].history.phoneGenerations.push(generation);
         this.saveToLocalStorage();
-        await this.saveToXML();
         
         // Display result
         this.displayPhoneResult(generation);
@@ -844,14 +841,13 @@ class KitCalculatorApp {
         this.showToast('Full XML database exported!', 'success');
     }
 
-    async clearHistory() {
+    clearHistory() {
         if (confirm('Are you sure you want to clear all history? This cannot be undone.')) {
             const userData = this.usersData[this.currentUser];
             userData.history.kitCalculations = [];
             userData.history.phoneGenerations = [];
             
             this.saveToLocalStorage();
-            await this.saveToXML();
             
             // Update all displays
             this.updateDashboard();
@@ -1351,11 +1347,10 @@ class KitCalculatorApp {
         this.updateKitHistory();
     }
 
-    async clearKitHistory() {
+    clearKitHistory() {
         if (confirm('Are you sure you want to clear all calculation history? This cannot be undone.')) {
             this.usersData[this.currentUser].history.kitCalculations = [];
             this.saveToLocalStorage();
-            await this.saveToXML();
             this.kitPagination.currentPage = 1;
             this.updateKitHistory();
             this.showToast('Kit calculation history cleared', 'success');
@@ -1399,11 +1394,10 @@ class KitCalculatorApp {
         this.updatePhoneHistory();
     }
 
-    async clearPhoneHistory() {
+    clearPhoneHistory() {
         if (confirm('Are you sure you want to clear all phone generation history? This cannot be undone.')) {
             this.usersData[this.currentUser].history.phoneGenerations = [];
             this.saveToLocalStorage();
-            await this.saveToXML();
             this.phonePagination.currentPage = 1;
             this.updatePhoneHistory();
             this.showToast('Phone generation history cleared', 'success');

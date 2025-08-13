@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit Calculator & Phone Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Section (Login/Register) -->
+        <div id="auth-section" class="auth-container">
+            <div class="auth-wrapper">
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h1>WELCOME</h1>
+                    <h2>Kit Calculator & Phone Generator</h2>
+                    <p>Experience powerful calculation tools and phone number generation with our comprehensive web application featuring secure authentication and data management.</p>
+                </div>
+
+                <!-- Sign In Card -->
+                <div class="signin-card">
+                    <div class="auth-forms">
+                        <!-- Login Form -->
+                        <form id="login-form" class="auth-form active">
+                            <h2>Sign in</h2>
+                            <p class="form-subtitle">Sign in with email or username below to login</p>
+                            
+                            <div class="form-group">
+                                <input type="text" id="login-username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="login-password" placeholder="Password" required>
+                            </div>
+                            
+                            <div class="form-options">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="remember-me">
+                                    <span class="checkmark"></span>
+                                    Remember me
+                                </label>
+                                <a href="#" class="forgot-password">Forgot password?</a>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-signin">Sign in</button>
+                            <p class="auth-switch">Don't have an account? <a href="#" id="show-register">Sign up</a></p>
+                        </form>
+
+                        <!-- Register Form -->
+                        <form id="register-form" class="auth-form">
+                            <h2>Sign up</h2>
+                            <p class="form-subtitle">Create your account to get started</p>
+                            
+                            <div class="form-group">
+                                <input type="text" id="register-username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="register-password" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-signin">Sign up</button>
+                            <p class="auth-switch">Already have an account? <a href="#" id="show-login">Sign in</a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="security-warning">
+                <p><strong>⚠️ SECURITY WARNING:</strong> This is a demo application only. Passwords are not securely handled and all data is stored client-side. Do not use real credentials.</p>
+            </div>
+        </div>
+
+        <!-- Main Application -->
+        <div id="main-app" class="app-container" style="display: none;">
+            <!-- Sidebar Navigation -->
+            <nav id="sidebar" class="sidebar">
+                <div class="sidebar-header">
+                    <h3 style="color: aliceblue;">Kit Calculator App</h3>
+                    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#" data-page="dashboard" class="nav-link active">📊 Dashboard</a></li>
+                    <li><a href="#" data-page="kit-calculator" class="nav-link">🧮 Kit Calculator</a></li>
+                    <li><a href="#" data-page="phone-generator" class="nav-link">📱 Phone Generator</a></li>
+                    <li><a href="#" data-page="account" class="nav-link">👤 Account</a></li>
+                    <li><a href="#" id="logout-btn" class="nav-link logout">🚪 Logout</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page active">
+                    <div class="page-header">
+                        <h1>Dashboard</h1>
+                        <p>Welcome back, <span id="username-display"></span>!</p>
+                    </div>
+                    
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>Kit Calculations</h3>
+                            <div class="stat-number" id="kit-calc-count">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Phone Numbers Generated</h3>
+                            <div class="stat-number" id="phone-gen-count">0</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h2>Recent Activity</h2>
+                        <div id="recent-activity-list">
+                            <p class="no-activity">No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kit Calculator Page -->
+                <div id="kit-calculator-page" class="page">
+                    <div class="page-header">
+                        <h1>Kit Number Calculator</h1>
+                        <p>Calculate: 10,000,000,000 - Kit Number = 8-digit result</p>
+                    </div>
+
+                    <div class="calculator-card">
+                        <form id="kit-calculator-form">
+                            <div class="form-group">
+                                <label for="kit-number">Enter Kit Number:</label>
+                                <input type="number" id="kit-number" min="0" max="9999999999" required>
+                                <small>Must be between 0 and 9,999,999,999</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Calculate</button>
+                        </form>
+
+                        <div id="calculation-result" class="result-display" style="display: none;">
+                            <h3>Result:</h3>
+                            <div class="result-details">
+                                <p><strong>Raw Result:</strong> <span id="raw-result"></span></p>
+                                <p><strong>8-Digit Padded:</strong> <span id="padded-result" class="highlight"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-section">
+                        <div class="history-header">
+                            <h2>Calculation History</h2>
+                            <div class="history-controls">
+                                <div class="search-box">
+                                    <input type="text" id="kit-search" placeholder="Search calculations..." class="search-input">
+                                    <button id="kit-search-clear" class="search-clear">✕</button>
+                                </div>
+                                <div class="filter-group">
+                                    <select id="kit-filter-column" class="filter-select">
+                                        <option value="">Filter by column...</option>
+                                        <option value="input">Input Kit Number</option>
+                                        <option value="raw">Raw Difference</option>
+                                        <option value="result">8-Digit Result</option>
+                                    </select>
+                                    <input type="text" id="kit-filter-value" placeholder="Filter value..." class="filter-input" disabled>
+                                </div>
+                                <button id="kit-clear-history" class="btn btn-danger btn-sm">Clear All History</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <div class="table-info">
+                                <span id="kit-showing-info">Showing 0 of 0 entries</span>
+                                <div class="entries-per-page">
+                                    <label>Show 
+                                        <select id="kit-entries-per-page">
+                                            <option value="5">5</option>
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        entries
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <table id="kit-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Input Kit Number</th>
+                                        <th>Raw Difference</th>
+                                        <th>Padded 8-Digit Result</th>
+                                        <th>Timestamp</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kit-history-tbody">
+                                    <tr>
+                                        <td colspan="6" class="no-data">No calculations yet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="pagination-container">
+                                <div class="pagination" id="kit-pagination">
+                                    <!-- Pagination will be dynamically generated -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone Generator Page -->
+                <div id="phone-generator-page" class="page">
+                    <div class="page-header">
+                        <h1>Random Cellcard Phone Generator</h1>
+                        <p>Generate random Cambodian Cellcard phone numbers</p>
+                    </div>
+
+                    <div class="generator-card">
+                        <div class="generator-controls">
+                            <button id="generate-phone-btn" class="btn btn-primary">Generate Phone Number</button>
+                            <div class="generator-options">
+                                <label>
+                                    <input type="checkbox" id="allow-duplicates" checked>
+                                    Allow duplicate numbers
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="phone-result" class="result-display" style="display: none;">
+                            <h3>Generated Number:</h3>
+                            <div class="result-details">
+                                <p class="phone-number"><span id="generated-phone" class="highlight"></span></p>
+                                <p><strong>Prefix:</strong> <span id="phone-prefix"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="prefix-info">
+                            <h4>Valid Cellcard Prefixes:</h4>
+                            <div class="prefix-list">
+                                <span class="prefix-badge">011</span>
+                                <span class="prefix-badge">012</span>
+                                <span class="prefix-badge">014</span>
+                                <span class="prefix-badge">017</span>
+                                <span class="prefix-badge">061</span>
+                                <span class="prefix-badge">076</span>
+                                <span class="prefix-badge">077</span>
+                                <span class="prefix-badge">078</span>
+                                <span class="prefix-badge">079</span>
+                                <span class="prefix-badge">085</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-section">
+                        <div class="history-header">
+                            <h2>Generation History</h2>
+                            <div class="history-controls">
+                                <div class="search-box">
+                                    <input type="text" id="phone-search" placeholder="Search phone numbers..." class="search-input">
+                                    <button id="phone-search-clear" class="search-clear">✕</button>
+                                </div>
+                                <div class="filter-group">
+                                    <select id="phone-filter-column" class="filter-select">
+                                        <option value="">Filter by column...</option>
+                                        <option value="number">Phone Number</option>
+                                        <option value="prefix">Prefix</option>
+                                    </select>
+                                    <input type="text" id="phone-filter-value" placeholder="Filter value..." class="filter-input" disabled>
+                                </div>
+                                <button id="phone-clear-history" class="btn btn-danger btn-sm">Clear All History</button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <div class="table-info">
+                                <span id="phone-showing-info">Showing 0 of 0 entries</span>
+                                <div class="entries-per-page">
+                                    <label>Show 
+                                        <select id="phone-entries-per-page">
+                                            <option value="5">5</option>
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                        entries
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <table id="phone-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Generated Number</th>
+                                        <th>Prefix</th>
+                                        <th>Timestamp</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="phone-history-tbody">
+                                    <tr>
+                                        <td colspan="5" class="no-data">No phone numbers generated yet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="pagination-container">
+                                <div class="pagination" id="phone-pagination">
+                                    <!-- Pagination will be dynamically generated -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Page -->
+                <div id="account-page" class="page">
+                    <div class="page-header">
+                        <h1>Account</h1>
+                        <p>Manage your account and data</p>
+                    </div>
+
+                    <div class="account-info">
+                        <div class="info-card">
+                            <h3>User Information</h3>
+                            <p><strong>Username:</strong> <span id="account-username"></span></p>
+                            <p><strong>Total Kit Calculations:</strong> <span id="account-kit-count">0</span></p>
+                            <p><strong>Total Phone Generations:</strong> <span id="account-phone-count">0</span></p>
+                        </div>
+
+                        <div class="data-management">
+                            <h3>Data Management</h3>
+                            <button id="export-data-btn" class="btn btn-secondary">📥 Export Full XML Database</button>
+                            <button id="clear-history-btn" class="btn btn-danger">🗑️ Clear All History</button>
+                            <button id="reset-demo-btn" class="btn btn-warning">🔄 Reset Demo (Dev)</button>
+                            <div class="database-info">
+                                <p><small>💡 <strong>Tip:</strong> After any action, the XML database will be automatically downloaded. Replace your <code>data/users.xml</code> file with the downloaded version to persist changes.</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
